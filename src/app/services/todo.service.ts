@@ -5,26 +5,21 @@ const crypto = require('crypto');
 
 @Injectable()
 export class TodoService {
-  private todos: Todo[];
-  private nextId: number;
 
   constructor() {
-    var saved = localStorage.getItem('todos');
-    this.todos = (localStorage.getItem('todos')!==null) ? JSON.parse(saved) : [];
-    localStorage.setItem('todos', JSON.stringify(this.todos));
     }
 
   public addTodo(text: string): void {
     if(text){
-      
       var current_date = (new Date()).valueOf().toString();
       var random = Math.random().toString();
       var id = current_date+random;
       
       let todo = new Todo(id, text);
-      this.todos.push(todo);
+      let todos = this.getTodos();
+      todos.push(todo);
+      this.setLocalStorageTodos(todos);
 
-      this.setLocalStorageTodos(this.todos);
     }
   }
 
@@ -34,8 +29,23 @@ export class TodoService {
   }
 
   public removeTodo(t: Todo): void {
-    this.todos = this.getTodos().filter((todo)=> todo.id != t.id);
-    this.setLocalStorageTodos(this.todos);
+    let todos = this.getTodos();
+    todos = todos.filter((todo)=> todo.id != t.id);
+    this.setLocalStorageTodos(todos);
+  }
+
+  public editTodo(t: Todo): void {
+    let todos = this.getTodos();
+    let text = prompt('Edit:', t.text);
+    if(text){
+    for (let i = 0; i < todos.length; i++) {
+      if(todos[i].id == t.id){
+        todos[i].text = text;
+        break;
+      }
+    }
+  }
+    this.setLocalStorageTodos(todos);
   }
 
   private setLocalStorageTodos(todos: Todo[]): void {

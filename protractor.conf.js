@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome'
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'https://piter2018.000webhostapp.com/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
